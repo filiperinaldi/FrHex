@@ -21,22 +21,23 @@
 #include "frhexFileHandler.h"
 
 FrhexModel::FrhexModel(QObject *parent, 
-					   FrhexFileHandler *file, 
-					   Endianness endianness,
-					   int dataSize,
-					   int columns)
+					   FrhexFileHandler *file)
 		: QAbstractTableModel(parent)
 {
 	mFile = file;
+}
+
+FrhexModel::~FrhexModel()
+{
+}
+
+void FrhexModel::setOptions(unsigned int columns, unsigned int dataSize, Endianness endianness)
+{
 	mEndianness = endianness;
 	mDataSize = dataSize;
 	mColumns = columns;
 	
 	mSetupGridLayout();
-}
-
-FrhexModel::~FrhexModel()
-{
 }
 
 struct GridLayout *FrhexModel::getGridLayout(void)
@@ -88,8 +89,7 @@ QVariant FrhexModel::mGetData(const QModelIndex & index) const
 	quint8 value[4];
 	qint64 address;
 	
-	switch (mGetColumType(index.column()))
-	{
+	switch (mGetColumType(index.column())) {
 	case COL_ADDRESS:
 		{
 			return QString("%1").arg((index.row() * mGridLayout.dataCharFieldCount), 0, 16).rightJustified(10,'0').toUpper();
@@ -224,8 +224,8 @@ QVariant FrhexModel::data ( const QModelIndex & index, int role ) const
 	}
 }
 
- QVariant FrhexModel::headerData(int section, Qt::Orientation orientation, int role) const
- {
+QVariant FrhexModel::headerData(int section, Qt::Orientation orientation, int role) const
+{
 	 if ((role != Qt::DisplayRole) ||
 		 (orientation != Qt::Horizontal))
 		 return QVariant();

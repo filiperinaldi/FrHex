@@ -24,6 +24,7 @@
 #include <QProgressDialog>
 #include "frmMain.h"
 #include "frmOpen.h"
+#include "frmOptions.h"
 #include "frhexEditor.h"
 
 FrmMain::FrmMain(QWidget *parent)
@@ -45,6 +46,7 @@ FrmMain::FrmMain(QWidget *parent)
 	connect(ui.actionOpen,		SIGNAL(triggered()),	this,	SLOT(openFile()) );
 	connect(ui.actionCloseTab,	SIGNAL(triggered()),	this,	SLOT(closeTab()) );
 	connect(ui.actionSave,		SIGNAL(triggered()),	this,	SLOT(saveFile()) );
+	connect(ui.actionOptions,	SIGNAL(triggered()),	this,	SLOT(options()) );
 }
 
 FrmMain::~FrmMain()
@@ -73,20 +75,32 @@ void FrmMain::openFile(void)
 		return;
 	}
 	
+	FrhexEditor *editor = new FrhexEditor(0, fileName, endianness, dataSize, 16);
+	editors.insert(editor->getWidget(), editor);
+
 	/* 
 	 * Add new tab 
 	 */
-	FrhexEditor *editor = new FrhexEditor(0, fileName, endianness, dataSize, 16);
-	QWidget *widget = editor->getWidget();
 	QFileInfo fileInfo(fileName); // Used to extract the filename without the path
-	int index = ui.tabs->addTab(widget, fileInfo.fileName());
+	int index = ui.tabs->addTab(editor->getWidget(), fileInfo.fileName());
 	ui.tabs->setCurrentIndex(index);
+
+	ui.actionOptions->setEnabled(true);
 }
 
 void FrmMain::closeTab(void)
 {
+	FrhexEditor *editor;
+	QWidget *widget = ui.tabs->currentWidget();
 	int index = ui.tabs->currentIndex();
+
+	editor = editors.take(widget);
 	ui.tabs->removeTab(index);
+
+	delete editor;
+
+	if (ui.tabs->count() == 0)
+		ui.actionOptions->setEnabled(false);
 }
 
 void FrmMain::saveFile(void)
@@ -95,6 +109,27 @@ void FrmMain::saveFile(void)
 
 void FrmMain::saveFileAs(void)
 {
+}
+
+void FrmMain::options(void)
+{
+	FrhexEditor *editor;
+	QWidget *widget;
+
+	widget = ui.tabs->currentWidget();
+	editor = editors.value(widget);
+
+	FrmOptions dialog(this, editor->getColumns(), 
+							editor->getDataSize(),
+							editor->getEndianness());
+	dialog.exec();
+
+	if (dialog.result() == QDialog::Rejected)
+		return;
+
+	editor->setOptions(dialog.getColumns(),
+					   dialog.getDataSize(),
+					   dialog.getEndianness());
 }
 
 void FrmMain::selectionUpdated(qint64 address, quint8 value)

@@ -17,34 +17,26 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#ifndef FRMMAIN_H
-#define FRMMAIN_H
+#ifndef FRMOPTIONS_H
+#define FRMOPTIONS_H
 
-#include <QtGui/QMainWindow>
-#include <QtGui/QLabel>
-#include <ui_frmMain.h>
+#include <QtGui/QDialog>
+#include <ui_frmOptions.h>
 #include <frhexEditor.h>
 
-class FrmMain : public QMainWindow
+class FrmOptions : public QDialog
 {
-	Q_OBJECT;
+    Q_OBJECT;
+
 private:
-	Ui::FrmMain_ui ui;
-	QLabel mLabelAddress;
-	QLabel mLabelValue;
-	QHash<QWidget *, FrhexEditor *> editors;
+    Ui::FrmOptions_ui ui;
 
 public:
-    FrmMain(QWidget *parent = 0);
-    ~FrmMain();
-
-public slots:
-	void openFile(void);
-	void closeTab(void);
-	void saveFile(void);
-	void saveFileAs(void);
-	void options(void);
-	void selectionUpdated(qint64 address, quint8 value);
+    FrmOptions(QWidget *parent, unsigned int columns, unsigned int dataSize, Endianness endianness);
+    ~FrmOptions();
+	unsigned int getColumns(void);
+	unsigned int getDataSize(void);
+	Endianness getEndianness(void);
 };
 
-#endif // FRMMAIN_H
+#endif // FRMOPTIONS_H

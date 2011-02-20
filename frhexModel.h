@@ -22,7 +22,6 @@
 
 #include <QAbstractTableModel>
 #include <QTableView>
-
 #include "frhexFileHandler.h"
 
 struct GridLayout {
@@ -55,8 +54,8 @@ class FrhexModel : public QAbstractTableModel
 private:
 	FrhexFileHandler *mFile;
 	Endianness mEndianness;
-	int mDataSize;
-	int mColumns;
+	unsigned int mDataSize;
+	unsigned int mColumns;
 	struct GridLayout mGridLayout;	
 	QSet<qint64> mChangedValues;
 	QVariant mGetData(const QModelIndex & index) const;
@@ -67,7 +66,7 @@ private:
 	void mSetupGridLayout(void);
 
 public:
-	FrhexModel(QObject *parent, FrhexFileHandler *file, Endianness endianness, int dataSize, int columns);
+	FrhexModel(QObject *parent, FrhexFileHandler *file);
 	~FrhexModel();
 	struct GridLayout *getGridLayout(void);
 	int rowCount ( const QModelIndex & parent = QModelIndex() ) const;
@@ -76,6 +75,12 @@ public:
 	QVariant headerData (int section, Qt::Orientation orientation, int role) const;
 	Qt::ItemFlags flags ( const QModelIndex & index ) const;
 	bool setData ( const QModelIndex & index, const QVariant & value, int role = Qt::EditRole );
+
+	unsigned int getColumns(void) {return mColumns;};
+	unsigned int getDataSize(void) {return mDataSize;};
+	Endianness getEndianness(void) {return mEndianness;};
+
+	void setOptions(unsigned int columns, unsigned int dataSize, Endianness endianness);
 
 signals:
 	void cursorChanged(qint64 address, unsigned char value);

@@ -25,9 +25,6 @@
 FrhexEditor::FrhexEditor(QObject *parent, QString filename, Endianness endianness, int dataSize, int columns)
 		: QObject(parent)
 {
-	/* 
-	 * Open file
-	 */
 	mFileHandler = new FrhexFileHandler(filename);
 	if (!mFileHandler->open()) {
 		QMessageBox msgBox(QMessageBox::Critical, "Open File", "Failed to open file");
@@ -35,10 +32,9 @@ FrhexEditor::FrhexEditor(QObject *parent, QString filename, Endianness endiannes
 		return;
 	}
 
-	mSetupView(0);
-	mModel = new FrhexModel(this, mFileHandler, endianness, dataSize, columns);
-	mView->setModel(mModel);
-	mSetupColumns();
+	mView = 0;
+	mModel = 0;
+	setOptions(columns, dataSize, endianness);
 }
 
 FrhexEditor::~FrhexEditor()
@@ -46,22 +42,6 @@ FrhexEditor::~FrhexEditor()
 	delete mFileHandler;
 	delete mView;
 	delete mModel;
-}
-
-void FrhexEditor::mSetupView(QWidget *parent)
-{
-	QGridLayout *layout = new QGridLayout(parent);
-	layout->setObjectName(QString::fromUtf8("layout"));
-
-	mView = new QTableView(parent);
-	mView->setObjectName(QString::fromUtf8("mView"));
-	layout->addWidget(mView, 0, 0);
-
-	mView->verticalHeader()->hide();
-	mView->setShowGrid(false);
-	mView->setAlternatingRowColors(true);
-	mView->setSelectionBehavior(QAbstractItemView::SelectItems);
-	mView->setSelectionMode(QAbstractItemView::ContiguousSelection);
 }
 
 void FrhexEditor::mSetupColumns(void)
@@ -103,4 +83,36 @@ QWidget *FrhexEditor::getWidget(void)
 void FrhexEditor::mSendAddressValue(qint64 address, quint8 value)
 {
 	emit selectionUpdated(address, value);
+}
+
+void FrhexEditor::setOptions(unsigned int columns, unsigned int dataSize, Endianness endianness)
+{
+	/*
+	 * Update Model
+	 */
+	if (!mModel)
+		mModel = new FrhexModel(this, mFileHandler);
+	mModel->setOptions(columns, dataSize, endianness);
+
+	/*
+	 * Setup View
+	 */
+	if (mView)
+		delete mView;
+
+	QGridLayout *layout = new QGridLayout(0);
+	layout->setObjectName(QString::fromUtf8("layout"));
+
+	mView = new QTableView(0);
+	mView->setObjectName(QString::fromUtf8("mView"));
+	layout->addWidget(mView, 0, 0);
+
+	mView->verticalHeader()->hide();
+	mView->setShowGrid(false);
+	mView->setAlternatingRowColors(true);
+	mView->setSelectionBehavior(QAbstractItemView::SelectItems);
+	mView->setSelectionMode(QAbstractItemView::ContiguousSelection);
+	mView->setModel(mModel);
+
+	mSetupColumns();
 }

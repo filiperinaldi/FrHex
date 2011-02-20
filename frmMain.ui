@@ -65,7 +65,7 @@
     <addaction name="actionRedo"/>
     <addaction name="separator"/>
     <addaction name="actionCopy"/>
-    <addaction name="actionPase"/>
+    <addaction name="actionPaste"/>
     <addaction name="separator"/>
     <addaction name="actionFind"/>
    </widget>
@@ -73,9 +73,7 @@
     <property name="title">
      <string>View</string>
     </property>
-    <addaction name="actionEndianness"/>
-    <addaction name="actionDataSize"/>
-    <addaction name="actionColumns"/>
+    <addaction name="actionOptions"/>
    </widget>
    <addaction name="menu_File"/>
    <addaction name="menuEdit"/>
@@ -187,7 +185,7 @@
     <string>Ctrl+C</string>
    </property>
   </action>
-  <action name="actionPase">
+  <action name="actionPaste">
    <property name="icon">
     <iconset resource="imgs.qrc">
      <normaloff>:/icons/Icons/edit-paste.png</normaloff>:/icons/Icons/edit-paste.png</iconset>
@@ -233,6 +231,14 @@
   <action name="actionColumns">
    <property name="text">
     <string>Columns</string>
+   </property>
+  </action>
+  <action name="actionOptions">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Options</string>
    </property>
   </action>
  </widget>

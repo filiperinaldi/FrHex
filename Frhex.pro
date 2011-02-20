@@ -9,14 +9,16 @@ SOURCES += main.cpp \
     frhexModel.cpp \
     frhexFileHandler.cpp \
     frhexEditor.cpp \
-    frmOpen.cpp
+    frmOpen.cpp \
+    frmOptions.cpp
 HEADERS += frmMain.h \
     frhexModel.h \
     frhexFileHandler.h \
     frhexEditor.h \
-    frmOpen.h
+    frmOpen.h \
+    frmOptions.h
 FORMS += frmMain.ui \
-    frmOpen.ui
+    frmOpen.ui \
+    frmOptions.ui
 RESOURCES += imgs.qrc
 OTHER_FILES += TODO.txt
-

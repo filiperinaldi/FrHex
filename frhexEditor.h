@@ -23,7 +23,6 @@
 #include <QWidget>
 #include <QTableView>
 #include <QString>
-
 #include "frhexFileHandler.h"
 #include "frhexModel.h"
 
@@ -31,19 +30,22 @@ class FrhexEditor : QObject
 {
 	Q_OBJECT
 
-public:
-	FrhexEditor(QObject *parent, QString filename, Endianness endianness=DATA_BIG_ENDIAN, int dataSize=1, int columns=16);
-	~FrhexEditor();
-	QWidget *getWidget(void);
-	
-
 private:
 	QTableView *mView;
 	FrhexModel *mModel;
 	FrhexFileHandler *mFileHandler;
-	void mSetupView(QWidget *parent);
 	void mSetupColumns(void);
 	void mSendAddressValue(qint64 address, quint8 value);
+
+public:
+	FrhexEditor(QObject *parent, QString filename, Endianness endianness=DATA_BIG_ENDIAN, int dataSize=1, int columns=16);
+	~FrhexEditor();
+	QWidget *getWidget(void);
+	void setOptions(unsigned int columns, unsigned int dataSize, Endianness endianness);
+
+	unsigned int getDataSize(void) {return mModel->getDataSize();};
+	unsigned int getColumns(void) {return mModel->getColumns();};
+	Endianness getEndianness(void) {return mModel->getEndianness();};
 
 signals:
 	void selectionUpdated(qint64 address, quint8 value);
