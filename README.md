@@ -5,6 +5,7 @@ FrHex - Hexadecimal Editor
 About the project:
 ------------------
 Simple (and incomplete at the moment) hexadecimal editor written in QT.
+See the [TODO list](./TODO.md) for the planned features.
 
 How to build and run:
 ---------------------
@@ -36,6 +37,6 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-- - - - - - - - - - - - - - 
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 Copyright (C) 2013 Filipe Rinaldi - filipe.rinaldi@gmail.com
 
