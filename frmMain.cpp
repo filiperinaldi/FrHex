@@ -130,6 +130,16 @@ void FrmMain::options(void)
 	editor->setOptions(dialog.getColumns(),
 					   dialog.getDataSize(),
 					   dialog.getEndianness());
+
+    /*
+     * setOptions creates a newView.
+     * We must replace the old view with the new view in both the tab and in the "editors" hashmap.
+     */
+    editors.remove(widget);
+    editors.insert(editor->getWidget(), editor);
+    QFileInfo fileInfo(editor->getFilename());
+    int index = ui.tabs->insertTab(ui.tabs->currentIndex(), editor->getWidget(), fileInfo.fileName());
+    show();
 }
 
 void FrmMain::selectionUpdated(qint64 address, quint8 value)

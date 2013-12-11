@@ -47,6 +47,7 @@ public:
 	void save(void);
 	void close(void);
 	qint64 getSize(void);
+	QString getFilename(void) {return mName;};
 
 private:
 	QFile mFile;

@@ -80,6 +80,12 @@ QWidget *FrhexEditor::getWidget(void)
 	return mView;
 }
 
+QString FrhexEditor::getFilename(void)
+{
+    if (mFileHandler)
+        return mFileHandler->getFilename();
+}
+
 void FrhexEditor::mSendAddressValue(qint64 address, quint8 value)
 {
 	emit selectionUpdated(address, value);

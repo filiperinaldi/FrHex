@@ -46,6 +46,7 @@ public:
 	unsigned int getDataSize(void) {return mModel->getDataSize();};
 	unsigned int getColumns(void) {return mModel->getColumns();};
 	Endianness getEndianness(void) {return mModel->getEndianness();};
+	QString getFilename(void);
 
 signals:
 	void selectionUpdated(qint64 address, quint8 value);
